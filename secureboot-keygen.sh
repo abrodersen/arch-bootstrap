@@ -37,13 +37,13 @@ generate_keys() {
     openssl req -new -x509 \
         -subj "/CN=${NAME} DB/" -days 3650 -nodes \
         -newkey rsa:4096 -sha256 \
-        -keyout $db_dir/DB.key -out $db_dir/DB.crt
+        -keyout $db_dir/db.key -out $db_dir/db.crt
 
-    openssl x509 -in $db_dir/DB.crt -out $db_dir/DB.cer -outform DER
+    openssl x509 -in $db_dir/db.crt -out $db_dir/db.cer -outform DER
 
     cert-to-efi-sig-list -g ${GUID} $pk_dir/PK.crt $pk_dir/PK.esl
     cert-to-efi-sig-list -g ${GUID} $kek_dir/KEK.crt $kek_dir/KEK.esl
-    cert-to-efi-sig-list -g ${GUID} $db_dir/DB.crt $db_dir/DB.esl
+    cert-to-efi-sig-list -g ${GUID} $db_dir/db.crt $db_dir/db.esl
 
     sign-efi-sig-list \
         -t "$(date --date='1 second' +'%Y-%m-%d %H:%M:%S')" \
@@ -60,7 +60,7 @@ generate_keys() {
     sign-efi-sig-list \
         -t "$(date --date='1 second' +'%Y-%m-%d %H:%M:%S')" \
         -k $kek_dir/KEK.key -c $kek_dir/KEK.crt \
-        DB $db_dir/DB.esl $db_dir/DB.auth
+        DB $db_dir/db.esl $db_dir/db.auth
 
     for path in "${key_paths[@]}"; do
         chmod -f 0600 $path/*.key || true

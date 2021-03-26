@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+args=('--force' '--no-hostonly-cmdline')
+
+while read -r line; do
+	if [[ "$line" == 'usr/lib/modules/'+([^/])'/pkgbase' ]]; then
+		read -r pkgbase < "/${line}"
+		kver="${line#'usr/lib/modules/'}"
+		kver="${kver%'/pkgbase'}"
+
+		dracut "${args[@]}" --hostonly --kver "$kver" "/boot/${pkgbase}.img" 
+		dracut "${args[@]}" --no-hostonly --kver "$kver" "/boot/${pkgbase}-fallback.img"
+	fi
+done
