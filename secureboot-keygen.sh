@@ -2,7 +2,7 @@
 set -e
 
 generate_keys() {
-    local NAME=$(hostname)
+    local NAME=$(cat /etc/hostname)
     local key_root="/etc/secureboot"
     local key_paths=($key_root/keys/{db,dbx,KEK,PK})
 
