@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
+bootctl update
+sbsign --key /etc/secureboot/keys/db/db.key --cert /etc/secureboot/keys/db/db.crt --output /boot/EFI/systemd/systemd-bootx64.efi /boot/EFI/systemd/systemd-bootx64.efi
+sbsign --key /etc/secureboot/keys/db/db.key --cert /etc/secureboot/keys/db/db.crt --output /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/BOOT/BOOTX64.EFI
